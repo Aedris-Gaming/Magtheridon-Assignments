@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magtheridon — Assignments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0604;
+    --panel: rgba(25, 14, 8, 0.85);
+    --border: rgba(201, 160, 90, 0.3);
+    --parchment: #e0cba0;
+    --dim: #9a8765;
+    --ember: #e8a04a;
+    --blood: #c41e1e;
+    --green: #7ad97a;
+    --purple: #b07ad9;
+    --clicker: #ffd96b;
+    --g1: #e85a5a;
+    --g2: #5a9ce8;
+    --g3: #5ae89c;
+    --g4: #c97ae8;
+    --g5: #e8c95a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at top, rgba(196, 30, 30, 0.15) 0%, transparent 50%),
+      linear-gradient(180deg, #0a0604 0%, #15090a 100%);
+    background-attachment: fixed;
+    color: var(--parchment);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.3;
+    min-height: 100vh;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    color: var(--parchment);
+    text-shadow: 0 0 20px rgba(196, 30, 30, 0.4);
+  }
+  .meta {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ember);
+    text-transform: uppercase;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+  }
+  .panel-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ember);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .panel-title .hint {
+    color: var(--dim);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    font-size: 9px;
+  }
+
+  .top-row {
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    gap: 10px;
+  }
+
+  .parties {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .party {
+    background: rgba(40, 22, 12, 0.5);
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-top: 3px solid var(--p-color, var(--ember));
+  }
+  .party.g1 { --p-color: var(--g1); }
+  .party.g2 { --p-color: var(--g2); }
+  .party.g3 { --p-color: var(--g3); }
+  .party.g4 { --p-color: var(--g4); }
+  .party.g5 { --p-color: var(--g5); }
+
+  .party-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--p-color, var(--ember));
+    text-align: center;
+    padding-bottom: 5px;
+    margin-bottom: 3px;
+    border-bottom: 1px dashed rgba(201, 160, 90, 0.2);
+  }
+  .pmember {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--parchment);
+  }
+
+  .room-wrap { display: flex; flex-direction: column; }
+  .room, .pos-map {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 700 / 525;
+    border-radius: 50%;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(80, 130, 110, 0.18), transparent 60%),
+      radial-gradient(circle at 70% 75%, rgba(40, 80, 70, 0.25), transparent 60%),
+      radial-gradient(ellipse at center, #2a4a3e 0%, #1a2e26 55%, #0a1410 100%);
+    border: 2px solid #4a6258;
+    box-shadow:
+      inset 0 0 60px rgba(0,0,0,0.8),
+      inset 0 0 0 6px rgba(20, 35, 28, 0.6);
+    touch-action: none;
+  }
+  .room::before, .pos-map::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-conic-gradient(from 0deg at 50% 50%, rgba(60, 90, 78, 0.18) 0deg 18deg, rgba(30, 50, 42, 0.18) 18deg 36deg),
+      radial-gradient(circle at 50% 50%, transparent 0%, transparent 30%, rgba(0,0,0,0.4) 80%);
+    mix-blend-mode: overlay;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .room::after, .pos-map::after {
+    content: '';
+    position: absolute;
+    inset: 4%;
+    border-radius: 50%;
+    border: 1px dashed rgba(201, 160, 90, 0.15);
+    pointer-events: none;
+  }
+
+  .mag-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ff6a3a 0%, #c41e1e 35%, #5a0808 70%, #1a0202 100%);
+    box-shadow:
+      0 0 35px rgba(196, 30, 30, 0.8),
+      0 0 70px rgba(196, 30, 30, 0.35),
+      inset 0 0 18px rgba(0,0,0,0.7),
+      inset 0 0 0 2px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 10px;
+    color: #ffe8d0;
+    letter-spacing: 0.2em;
+    text-align: center;
+    text-shadow: 0 0 6px #000, 0 1px 2px #000;
+    z-index: 4;
+  }
+  .mag-arrow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, calc(-50% - 42px));
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 12px solid rgba(255, 100, 60, 0.85);
+    z-index: 4;
+    filter: drop-shadow(0 0 4px rgba(196, 30, 30, 0.6));
+  }
+
+  .channeler {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+    width: 110px;
+  }
+  .ch-skull    { top: 14%; left: 50%; }
+  .ch-x        { top: 42%; left: 84%; }
+  .ch-triangle { top: 84%; left: 70%; }
+  .ch-moon     { top: 84%; left: 30%; }
+  .ch-square   { top: 42%; left: 16%; }
+
+  .marker {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: #000;
+    border: 2px solid rgba(0,0,0,0.6);
+    box-shadow:
+      0 0 16px currentColor,
+      0 0 4px #000,
+      inset 0 0 6px rgba(0,0,0,0.3),
+      0 2px 6px rgba(0,0,0,0.7);
+    margin: 0 auto 5px;
+  }
+  .marker.skull    { background: #f0f0f0; color: #1a1a1a; }
+  .marker.x        { background: #d63333; color: #fff; }
+  .marker.square   { background: #4a8fd6; color: #fff; }
+  .marker.triangle { background: #4ad66b; color: #1a1a1a; }
+  .marker.moon     { background: #7ec3e8; color: #1a1a1a; }
+
+  .marker-sm {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 12px;
+    color: #000;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,0.4);
+  }
+  .marker-sm.skull    { background: #e6e6e6; }
+  .marker-sm.x        { background: #d63333; color: #fff; }
+  .marker-sm.square   { background: #4a8fd6; color: #fff; }
+  .marker-sm.triangle { background: #4ad66b; }
+  .marker-sm.moon     { background: #7ec3e8; }
+
+  .ch-clickers {
+    background: rgba(15, 8, 4, 0.88);
+    border: 1px solid rgba(255, 217, 107, 0.45);
+    border-radius: 3px;
+    padding: 4px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .ch-clicker-line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--clicker);
+    text-shadow: 0 1px 2px #000;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .ch-num {
+    width: 12px; height: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #1a0d04;
+    background: var(--clicker);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .sel-btn, .tool-btn {
+    background: rgba(40, 22, 12, 0.7);
+    border: 1px solid var(--border);
+    color: var(--parchment);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .sel-btn:hover, .tool-btn:hover { background: rgba(60, 35, 18, 0.8); }
+  .sel-btn.active {
+    background: var(--btn-color, var(--ember));
+    color: #1a0d04;
+    border-color: var(--btn-color, var(--ember));
+    box-shadow: 0 0 12px var(--btn-color, var(--ember));
+  }
+  .sel-btn[data-party="all"] { --btn-color: var(--ember); }
+  .sel-btn[data-party="1"]   { --btn-color: var(--g1); }
+  .sel-btn[data-party="2"]   { --btn-color: var(--g2); }
+  .sel-btn[data-party="3"]   { --btn-color: var(--g3); }
+  .sel-btn[data-party="4"]   { --btn-color: var(--g4); }
+  .sel-btn[data-party="5"]   { --btn-color: var(--g5); }
+
+  .tool-btn { border-color: rgba(122, 217, 122, 0.4); }
+  .tool-btn.danger { border-color: rgba(196, 30, 30, 0.6); color: #ffb0b0; }
+  .tool-btn.active-edit {
+    background: var(--green);
+    color: #0a1410;
+    border-color: var(--green);
+    box-shadow: 0 0 12px rgba(122, 217, 122, 0.6);
+  }
+  .tool-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 4px;
+  }
+
+  .pos-map-wrap {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 14px;
+  }
+
+  .pos-map.editing { cursor: crosshair; }
+  .pos-map.editing .raider { cursor: grab; }
+  .pos-map.editing .raider:active { cursor: grabbing; }
+  .pos-map.editing .raider .dot {
+    box-shadow: 0 0 10px var(--p-color), 0 0 4px #fff, 0 1px 3px rgba(0,0,0,0.8);
+  }
+
+  .pos-map .mag-center { width: 50px; height: 50px; font-size: 9px; }
+  .pos-map .mag-arrow { transform: translate(-50%, calc(-50% - 36px)); }
+
+  .pos-marker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    text-align: center;
+    pointer-events: none;
+  }
+  .pos-marker .marker-tiny {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 800;
+    font-size: 13px;
+    color: #000;
+    border: 1.5px solid rgba(0,0,0,0.6);
+    box-shadow:
+      0 0 10px currentColor,
+      0 0 3px #000,
+      0 1px 4px rgba(0,0,0,0.7);
+    margin: 0 auto 2px;
+  }
+  .pos-marker .marker-tiny.skull    { background: #f0f0f0; color: #1a1a1a; }
+  .pos-marker .marker-tiny.x        { background: #d63333; color: #fff; }
+  .pos-marker .marker-tiny.square   { background: #4a8fd6; color: #fff; }
+  .pos-marker .marker-tiny.triangle { background: #4ad66b; color: #1a1a1a; }
+  .pos-marker .marker-tiny.moon     { background: #7ec3e8; color: #1a1a1a; }
+
+  .raider {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+    text-align: center;
+    transition: opacity 0.25s;
+    touch-action: none;
+  }
+  .raider.dragging {
+    transition: none;
+    z-index: 99;
+  }
+  .raider.dragging .dot {
+    transform: scale(1.5);
+    box-shadow: 0 0 16px var(--p-color), 0 0 8px #fff, 0 1px 4px rgba(0,0,0,0.9);
+  }
+  .raider .dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--p-color);
+    border: 1.5px solid #1a0d04;
+    box-shadow: 0 0 6px var(--p-color), 0 1px 3px rgba(0,0,0,0.8);
+    margin: 0 auto 1px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .raider .dot.is-clicker {
+    border: 2px solid var(--clicker);
+    box-shadow: 0 0 8px var(--clicker), 0 0 4px var(--p-color);
+  }
+  .raider .name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 9px;
+    color: #fff;
+    text-shadow: 0 0 3px #000, 0 1px 2px #000, -1px 0 1px #000, 1px 0 1px #000;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+  .raider.g1 { --p-color: var(--g1); }
+  .raider.g2 { --p-color: var(--g2); }
+  .raider.g3 { --p-color: var(--g3); }
+  .raider.g4 { --p-color: var(--g4); }
+  .raider.g5 { --p-color: var(--g5); }
+
+  .pos-map.filtered .raider:not(.highlight) {
+    opacity: 0.18;
+  }
+  .pos-map.filtered .raider.highlight {
+    z-index: 8;
+  }
+  .pos-map.filtered .raider.highlight .dot {
+    transform: scale(1.3);
+    box-shadow: 0 0 14px var(--p-color), 0 0 6px #fff;
+  }
+  .pos-map.filtered .raider.highlight .name {
+    font-size: 10px;
+  }
+
+  .pos-info {
+    background: rgba(40, 22, 12, 0.5);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pos-info-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--ember);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #1a0d04;
+  }
+  .legend-dot.g1 { background: var(--g1); }
+  .legend-dot.g2 { background: var(--g2); }
+  .legend-dot.g3 { background: var(--g3); }
+  .legend-dot.g4 { background: var(--g4); }
+  .legend-dot.g5 { background: var(--g5); }
+  .legend-dot.clicker { background: transparent; border: 2px solid var(--clicker); box-shadow: 0 0 4px var(--clicker); }
+
+  .pos-info .helper {
+    font-style: italic;
+    color: var(--dim);
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .save-status {
+    color: var(--green);
+    font-size: 10px;
+    font-style: italic;
+    margin-left: 6px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .save-status.show { opacity: 1; }
+
+  table.interrupts {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table.interrupts th, table.interrupts td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201, 160, 90, 0.1);
+  }
+  table.interrupts th {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding-bottom: 6px;
+  }
+  table.interrupts th.mending { color: var(--green); }
+  table.interrupts th.volley { color: var(--purple); }
+  table.interrupts td {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--parchment);
+  }
+  table.interrupts tr:last-child td { border-bottom: none; }
+
+  .marker-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tank-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--parchment);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  .swap {
+    color: var(--ember);
+    font-style: italic;
+    font-size: 11px;
+  }
+  .none-cell {
+    color: var(--dim);
+    font-style: italic;
+  }
+
+  .clickers {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .cgroup {
+    background: rgba(40, 22, 12, 0.5);
+    border: 1px solid var(--border);
+    padding: 7px 9px;
+  }
+  .cgroup-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--clicker);
+    margin-bottom: 5px;
+    text-align: center;
+    padding-bottom: 3px;
+    border-bottom: 1px dashed rgba(201, 160, 90, 0.2);
+  }
+  .cline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    font-size: 12px;
+    color: var(--parchment);
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+  }
+  .cnum {
+    width: 16px; height: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ember);
+    border: 1px solid var(--ember);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .lock-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+  .lock-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .lock-item .label {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--ember);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .lock-item .name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--parchment);
+    letter-spacing: 0.05em;
+  }
+  .lock-item .arrow {
+    color: var(--dim);
+    margin: 0 2px;
+    font-style: italic;
+  }
+  .lock-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--border);
+  }
+  .lock-warning { color: var(--blood); }
+
+  @media (max-width: 900px) {
+    .top-row { grid-template-columns: 1fr; }
+    .parties { grid-template-columns: repeat(2, 1fr); }
+    .clickers { grid-template-columns: repeat(2, 1fr); }
+    .pos-map-wrap { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>⚔ MAGTHERIDON</h1>
+    <div class="meta">Parties · Cubes · Kicks</div>
+  </header>
+
+  <div class="top-row">
+
+    <div class="panel">
+      <div class="panel-title">
+        <span>Parties</span>
+        <span class="hint">Non-clickers stack behind boss</span>
+      </div>
+      <div class="parties">
+        <div class="party g1">
+          <div class="party-label">G 1</div>
+          <div class="pmember">Yoyolanda</div>
+          <div class="pmember">Unbearable</div>
+          <div class="pmember">Kursd</div>
+          <div class="pmember">Ameliore</div>
+          <div class="pmember">Superfail</div>
+        </div>
+        <div class="party g2">
+          <div class="party-label">G 2</div>
+          <div class="pmember">Jarke</div>
+          <div class="pmember">Excess</div>
+          <div class="pmember">Rukkuz</div>
+          <div class="pmember">Thiccstache</div>
+          <div class="pmember">Mug</div>
+        </div>
+        <div class="party g3">
+          <div class="party-label">G 3</div>
+          <div class="pmember">Loxo</div>
+          <div class="pmember">Aedris</div>
+          <div class="pmember">Rommulus</div>
+          <div class="pmember">Revorra</div>
+          <div class="pmember">Starblind</div>
+        </div>
+        <div class="party g4">
+          <div class="party-label">G 4</div>
+          <div class="pmember">Pheals</div>
+          <div class="pmember">Teiah</div>
+          <div class="pmember">Nibsi</div>
+          <div class="pmember">Shortshack</div>
+          <div class="pmember">Hootie</div>
+        </div>
+        <div class="party g5">
+          <div class="party-label">G 5</div>
+          <div class="pmember">Burdienz</div>
+          <div class="pmember">Lanrian</div>
+          <div class="pmember">Mathalord</div>
+          <div class="pmember">Merlinmurph</div>
+          <div class="pmember">Freezypops</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel room-wrap">
+      <div class="panel-title">
+        <span>Cube Phase — Clicker Positions</span>
+      </div>
+      <div class="room">
+        <div class="mag-arrow"></div>
+        <div class="mag-center">MAG</div>
+
+        <div class="channeler ch-skull">
+          <div class="marker skull">☠</div>
+          <div class="ch-clickers">
+            <div class="ch-clicker-line"><span class="ch-num">1</span>Pheals</div>
+            <div class="ch-clicker-line"><span class="ch-num">2</span>Aedris</div>
+            <div class="ch-clicker-line"><span class="ch-num">3</span>Rommulus</div>
+          </div>
+        </div>
+        <div class="channeler ch-x">
+          <div class="marker x">✕</div>
+          <div class="ch-clickers">
+            <div class="ch-clicker-line"><span class="ch-num">1</span>Mug</div>
+            <div class="ch-clicker-line"><span class="ch-num">2</span>Loxo</div>
+            <div class="ch-clicker-line"><span class="ch-num">3</span>Starblind</div>
+          </div>
+        </div>
+        <div class="channeler ch-triangle">
+          <div class="marker triangle">▲</div>
+          <div class="ch-clickers">
+            <div class="ch-clicker-line"><span class="ch-num">1</span>Freezy</div>
+            <div class="ch-clicker-line"><span class="ch-num">2</span>Hootie</div>
+            <div class="ch-clicker-line"><span class="ch-num">3</span>Lanrian</div>
+          </div>
+        </div>
+        <div class="channeler ch-moon">
+          <div class="marker moon">☾</div>
+          <div class="ch-clickers">
+            <div class="ch-clicker-line"><span class="ch-num">1</span>Revorra</div>
+            <div class="ch-clicker-line"><span class="ch-num">2</span>Burdienz</div>
+            <div class="ch-clicker-line"><span class="ch-num">3</span>Mathalord</div>
+          </div>
+        </div>
+        <div class="channeler ch-square">
+          <div class="marker square">■</div>
+          <div class="ch-clickers">
+            <div class="ch-clicker-line"><span class="ch-num">1</span>Merlinmurph</div>
+            <div class="ch-clicker-line"><span class="ch-num">2</span>Teiah</div>
+            <div class="ch-clicker-line"><span class="ch-num">3</span>Unbearable</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Raid Positioning Map</span>
+      <span class="hint">Toggle parties · Edit Mode to drag <span class="save-status" id="saveStatus">Saved ✓</span></span>
+    </div>
+    <div class="toolbar" id="toolbar">
+      <button class="sel-btn active" data-party="all">All</button>
+      <button class="sel-btn" data-party="1">Group 1</button>
+      <button class="sel-btn" data-party="2">Group 2</button>
+      <button class="sel-btn" data-party="3">Group 3</button>
+      <button class="sel-btn" data-party="4">Group 4</button>
+      <button class="sel-btn" data-party="5">Group 5</button>
+      <span class="tool-divider"></span>
+      <button class="tool-btn" id="editBtn">✎ Edit Mode</button>
+      <button class="tool-btn danger" id="resetBtn">↺ Reset</button>
+    </div>
+
+    <div class="pos-map-wrap">
+      <div class="pos-map" id="posMap">
+        <div class="mag-arrow"></div>
+        <div class="mag-center">MAG</div>
+
+        <div class="pos-marker" style="top: 14%; left: 50%;"><div class="marker-tiny skull">☠</div></div>
+        <div class="pos-marker" style="top: 42%; left: 84%;"><div class="marker-tiny x">✕</div></div>
+        <div class="pos-marker" style="top: 84%; left: 70%;"><div class="marker-tiny triangle">▲</div></div>
+        <div class="pos-marker" style="top: 84%; left: 30%;"><div class="marker-tiny moon">☾</div></div>
+        <div class="pos-marker" style="top: 42%; left: 16%;"><div class="marker-tiny square">■</div></div>
+
+        <!-- GROUP 1 -->
+        <div class="raider g1" data-id="unbearable" data-party="1" style="top: 39%; left: 12%;"><div class="dot is-clicker"></div><div class="name">Unbearable</div></div>
+        <div class="raider g1" data-id="kursd" data-party="1" style="top: 38%; left: 50%;"><div class="dot"></div><div class="name">Kursd ⛨</div></div>
+        <div class="raider g1" data-id="yoyolanda" data-party="1" style="top: 64%; left: 38%;"><div class="dot"></div><div class="name">Yoyolanda</div></div>
+        <div class="raider g1" data-id="ameliore" data-party="1" style="top: 70%; left: 44%;"><div class="dot"></div><div class="name">Ameliore</div></div>
+        <div class="raider g1" data-id="superfail" data-party="1" style="top: 68%; left: 32%;"><div class="dot"></div><div class="name">Superfail</div></div>
+
+        <!-- GROUP 2 -->
+        <div class="raider g2" data-id="mug" data-party="2" style="top: 39%; left: 88%;"><div class="dot is-clicker"></div><div class="name">Mug</div></div>
+        <div class="raider g2" data-id="jarke" data-party="2" style="top: 64%; left: 62%;"><div class="dot"></div><div class="name">Jarke</div></div>
+        <div class="raider g2" data-id="excess" data-party="2" style="top: 70%; left: 56%;"><div class="dot"></div><div class="name">Excess</div></div>
+        <div class="raider g2" data-id="rukkuz" data-party="2" style="top: 68%; left: 68%;"><div class="dot"></div><div class="name">Rukkuz</div></div>
+        <div class="raider g2" data-id="thiccstache" data-party="2" style="top: 74%; left: 62%;"><div class="dot"></div><div class="name">Thiccstache</div></div>
+
+        <!-- GROUP 3 -->
+        <div class="raider g3" data-id="aedris" data-party="3" style="top: 24%; left: 44%;"><div class="dot is-clicker"></div><div class="name">Aedris ⛨</div></div>
+        <div class="raider g3" data-id="rommulus" data-party="3" style="top: 24%; left: 56%;"><div class="dot is-clicker"></div><div class="name">Rommulus</div></div>
+        <div class="raider g3" data-id="loxo" data-party="3" style="top: 50%; left: 78%;"><div class="dot is-clicker"></div><div class="name">Loxo</div></div>
+        <div class="raider g3" data-id="starblind" data-party="3" style="top: 56%; left: 86%;"><div class="dot is-clicker"></div><div class="name">Starblind</div></div>
+        <div class="raider g3" data-id="revorra" data-party="3" style="top: 78%; left: 24%;"><div class="dot is-clicker"></div><div class="name">Revorra</div></div>
+
+        <!-- GROUP 4 -->
+        <div class="raider g4" data-id="pheals" data-party="4" style="top: 18%; left: 50%;"><div class="dot is-clicker"></div><div class="name">Pheals</div></div>
+        <div class="raider g4" data-id="teiah" data-party="4" style="top: 45%; left: 12%;"><div class="dot is-clicker"></div><div class="name">Teiah</div></div>
+        <div class="raider g4" data-id="hootie" data-party="4" style="top: 78%; left: 76%;"><div class="dot is-clicker"></div><div class="name">Hootie</div></div>
+        <div class="raider g4" data-id="shortshack" data-party="4" style="top: 56%; left: 50%;"><div class="dot"></div><div class="name">Shortshack</div></div>
+        <div class="raider g4" data-id="nibsi" data-party="4" style="top: 60%; left: 50%;"><div class="dot"></div><div class="name">Nibsi</div></div>
+
+        <!-- GROUP 5 -->
+        <div class="raider g5" data-id="burdienz" data-party="5" style="top: 84%; left: 24%;"><div class="dot is-clicker"></div><div class="name">Burdienz</div></div>
+        <div class="raider g5" data-id="mathalord" data-party="5" style="top: 84%; left: 36%;"><div class="dot is-clicker"></div><div class="name">Mathalord</div></div>
+        <div class="raider g5" data-id="merlinmurph" data-party="5" style="top: 50%; left: 20%;"><div class="dot is-clicker"></div><div class="name">Merlinmurph</div></div>
+        <div class="raider g5" data-id="freezy" data-party="5" style="top: 84%; left: 64%;"><div class="dot is-clicker"></div><div class="name">Freezy</div></div>
+        <div class="raider g5" data-id="lanrian" data-party="5" style="top: 90%; left: 70%;"><div class="dot is-clicker"></div><div class="name">Lanrian</div></div>
+      </div>
+
+      <div class="pos-info">
+        <div class="pos-info-title">Legend</div>
+        <div class="legend-row"><span class="legend-dot g1"></span>Group 1</div>
+        <div class="legend-row"><span class="legend-dot g2"></span>Group 2</div>
+        <div class="legend-row"><span class="legend-dot g3"></span>Group 3</div>
+        <div class="legend-row"><span class="legend-dot g4"></span>Group 4</div>
+        <div class="legend-row"><span class="legend-dot g5"></span>Group 5</div>
+        <div class="legend-row"><span class="legend-dot clicker"></span>Clicker (gold ring)</div>
+        <div class="legend-row"><span style="color:var(--ember); font-weight:700;">⛨</span>Tank</div>
+        <div class="helper">Tap <strong>Edit Mode</strong>, then drag any raider to reposition. Changes save automatically in your browser.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Tanks &amp; Interrupt Rotation</span>
+    </div>
+    <table class="interrupts">
+      <thead>
+        <tr>
+          <th style="width: 22%;">Mob</th>
+          <th style="width: 22%;">Tank</th>
+          <th class="mending" style="width: 28%;">① Dark Mending</th>
+          <th class="volley" style="width: 28%;">② Shadowbolt Volley</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="marker-cell"><span class="marker-sm skull">☠</span> Skull</div></td>
+          <td><span class="tank-name">Kursd</span></td>
+          <td>Kursd</td>
+          <td>Ameliore</td>
+        </tr>
+        <tr>
+          <td><div class="marker-cell"><span class="marker-sm x">✕</span> Cross</div></td>
+          <td><span class="tank-name">Unbearable</span></td>
+          <td>Shortshack <span class="swap">→</span> Freezypops</td>
+          <td>Jarke</td>
+        </tr>
+        <tr>
+          <td><div class="marker-cell"><span class="marker-sm square">■</span> Square</div></td>
+          <td><span class="tank-name">Aedris</span></td>
+          <td>Yoyo</td>
+          <td><span class="none-cell">None</span></td>
+        </tr>
+        <tr>
+          <td><div class="marker-cell"><span class="marker-sm triangle">▲</span> Triangle</div></td>
+          <td><span class="tank-name">Aedris</span></td>
+          <td>Superfail</td>
+          <td><span class="none-cell">None</span></td>
+        </tr>
+        <tr>
+          <td><div class="marker-cell"><span class="marker-sm moon">☾</span> Moon</div></td>
+          <td><span class="tank-name">Aedris</span></td>
+          <td>Excess</td>
+          <td>Hootie</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Cube Clicker Rotation — 1 → 2 → 3</span>
+    </div>
+    <div class="clickers">
+      <div class="cgroup">
+        <div class="cgroup-label"><span class="marker-sm skull">☠</span>Skull</div>
+        <div class="cline"><span class="cnum">1</span>Pheals</div>
+        <div class="cline"><span class="cnum">2</span>Aedris</div>
+        <div class="cline"><span class="cnum">3</span>Rommulus</div>
+      </div>
+      <div class="cgroup">
+        <div class="cgroup-label"><span class="marker-sm x">✕</span>Cross</div>
+        <div class="cline"><span class="cnum">1</span>Mug</div>
+        <div class="cline"><span class="cnum">2</span>Loxo</div>
+        <div class="cline"><span class="cnum">3</span>Starblind</div>
+      </div>
+      <div class="cgroup">
+        <div class="cgroup-label"><span class="marker-sm square">■</span>Square</div>
+        <div class="cline"><span class="cnum">1</span>Merlinmurph</div>
+        <div class="cline"><span class="cnum">2</span>Teiah</div>
+        <div class="cline"><span class="cnum">3</span>Unbearable</div>
+      </div>
+      <div class="cgroup">
+        <div class="cgroup-label"><span class="marker-sm triangle">▲</span>Triangle</div>
+        <div class="cline"><span class="cnum">1</span>Freezy</div>
+        <div class="cline"><span class="cnum">2</span>Hootie</div>
+        <div class="cline"><span class="cnum">3</span>Lanrian</div>
+      </div>
+      <div class="cgroup">
+        <div class="cgroup-label"><span class="marker-sm moon">☾</span>Moon</div>
+        <div class="cline"><span class="cnum">1</span>Revorra</div>
+        <div class="cline"><span class="cnum">2</span>Burdienz</div>
+        <div class="cline"><span class="cnum">3</span>Mathalord</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Warlocks</span>
+    </div>
+    <div class="lock-row">
+      <div class="lock-item">
+        <span class="label">All:</span>
+        <span class="name">Curse of Tongues</span>
+        <span class="arrow">on all mobs</span>
+      </div>
+      <div class="lock-divider"></div>
+      <div class="lock-item">
+        <span class="label lock-warning">Banish:</span>
+        <span class="name">Infernals on spawn</span>
+      </div>
+      <div class="lock-divider"></div>
+      <div class="lock-item">
+        <span class="label">Rommulus:</span>
+        <span class="name">CoE</span>
+      </div>
+      <div class="lock-divider"></div>
+      <div class="lock-item">
+        <span class="label">Mathalord:</span>
+        <span class="name">CoR</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'mag-positions-v1';
+  const allBtn = document.querySelector('.sel-btn[data-party="all"]');
+  const partyBtns = document.querySelectorAll('.sel-btn:not([data-party="all"])');
+  const editBtn = document.getElementById('editBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const posMap = document.getElementById('posMap');
+  const raiders = posMap.querySelectorAll('.raider');
+  const saveStatus = document.getElementById('saveStatus');
+
+  // Capture defaults so reset works
+  const defaults = {};
+  raiders.forEach(r => {
+    defaults[r.dataset.id] = { top: r.style.top, left: r.style.left };
+  });
+
+  // ===== Persistence (try shared storage, fall back to localStorage, fall back to memory) =====
+  let memoryStore = null;
+
+  async function savePositions() {
+    const positions = {};
+    raiders.forEach(r => {
+      positions[r.dataset.id] = { top: r.style.top, left: r.style.left };
+    });
+    const json = JSON.stringify(positions);
+    try {
+      if (window.storage && window.storage.set) {
+        await window.storage.set(STORAGE_KEY, json, true);
+      } else if (window.localStorage) {
+        localStorage.setItem(STORAGE_KEY, json);
+      } else {
+        memoryStore = json;
+      }
+      flashSaved();
+    } catch (e) {
+      try {
+        if (window.localStorage) localStorage.setItem(STORAGE_KEY, json);
+        else memoryStore = json;
+        flashSaved();
+      } catch {
+        memoryStore = json;
+      }
+    }
+  }
+
+  async function loadPositions() {
+    let json = null;
+    try {
+      if (window.storage && window.storage.get) {
+        const result = await window.storage.get(STORAGE_KEY, true);
+        if (result && result.value) json = result.value;
+      }
+    } catch {}
+    if (!json) {
+      try {
+        if (window.localStorage) json = localStorage.getItem(STORAGE_KEY);
+      } catch {}
+    }
+    if (!json) json = memoryStore;
+    if (!json) return;
+    try {
+      const positions = JSON.parse(json);
+      raiders.forEach(r => {
+        const p = positions[r.dataset.id];
+        if (p) {
+          r.style.top = p.top;
+          r.style.left = p.left;
+        }
+      });
+    } catch {}
+  }
+
+  function flashSaved() {
+    saveStatus.classList.add('show');
+    clearTimeout(flashSaved._t);
+    flashSaved._t = setTimeout(() => saveStatus.classList.remove('show'), 1200);
+  }
+
+  // ===== Party highlight (multi-toggle) =====
+  function applyHighlight() {
+    const active = Array.from(partyBtns)
+      .filter(b => b.classList.contains('active'))
+      .map(b => b.dataset.party);
+
+    if (active.length === 0) {
+      allBtn.classList.add('active');
+      posMap.classList.remove('filtered');
+      raiders.forEach(r => r.classList.remove('highlight'));
+    } else {
+      allBtn.classList.remove('active');
+      posMap.classList.add('filtered');
+      raiders.forEach(r => {
+        if (active.includes(r.dataset.party)) r.classList.add('highlight');
+        else r.classList.remove('highlight');
+      });
+    }
+  }
+
+  allBtn.addEventListener('click', () => {
+    partyBtns.forEach(b => b.classList.remove('active'));
+    applyHighlight();
+  });
+  partyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      applyHighlight();
+    });
+  });
+
+  // ===== Edit mode + dragging =====
+  let editMode = false;
+  editBtn.addEventListener('click', () => {
+    editMode = !editMode;
+    editBtn.classList.toggle('active-edit', editMode);
+    posMap.classList.toggle('editing', editMode);
+    editBtn.textContent = editMode ? '✓ Done Editing' : '✎ Edit Mode';
+  });
+
+  resetBtn.addEventListener('click', () => {
+    if (!confirm('Reset all raider positions to defaults?')) return;
+    raiders.forEach(r => {
+      const d = defaults[r.dataset.id];
+      r.style.top = d.top;
+      r.style.left = d.left;
+    });
+    savePositions();
+  });
+
+  // Drag handling — pointer events for unified mouse/touch support
+  let dragTarget = null;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+
+  function getPercent(clientX, clientY) {
+    const rect = posMap.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * 100;
+    const y = ((clientY - rect.top) / rect.height) * 100;
+    return {
+      x: Math.max(2, Math.min(98, x)),
+      y: Math.max(2, Math.min(98, y))
+    };
+  }
+
+  raiders.forEach(r => {
+    r.addEventListener('pointerdown', (e) => {
+      if (!editMode) return;
+      e.preventDefault();
+      dragTarget = r;
+      r.classList.add('dragging');
+      r.setPointerCapture(e.pointerId);
+    });
+
+    r.addEventListener('pointermove', (e) => {
+      if (dragTarget !== r) return;
+      e.preventDefault();
+      const pos = getPercent(e.clientX, e.clientY);
+      r.style.left = pos.x.toFixed(1) + '%';
+      r.style.top = pos.y.toFixed(1) + '%';
+    });
+
+    r.addEventListener('pointerup', (e) => {
+      if (dragTarget !== r) return;
+      r.classList.remove('dragging');
+      try { r.releasePointerCapture(e.pointerId); } catch {}
+      dragTarget = null;
+      savePositions();
+    });
+
+    r.addEventListener('pointercancel', () => {
+      r.classList.remove('dragging');
+      dragTarget = null;
+    });
+  });
+
+  // Load saved positions on startup
+  loadPositions();
+</script>
+</body>
+</html>
